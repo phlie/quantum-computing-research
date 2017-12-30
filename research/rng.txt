@@ -1,0 +1,10 @@
+# 300 runs with 3 digits at 199 shots, adding up 10 digits and then dividing by modulus 3
+[148, 64, 88]
+[152, 49, 99]
+[153, 51, 96]
+[149, 56, 95]
+# 200 runs with 2 digits at 1024 shots, adding up 10 digits and then dividing by modulus 2
+[86, 123]
+[93, 116]
+[92, 117]
+[96, 113]

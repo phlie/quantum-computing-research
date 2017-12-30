@@ -1,0 +1,11 @@
+This is the ratio of 1's to 0's for 0.x = pi using a u3 Gate on the first var
+
+For  0.1  * pi, ratio of 1's to 0's:  0.022076860179885527
+For  0.2  * pi, ratio of 1's to 0's:  0.1103708638685321
+For  0.3  * pi, ratio of 1's to 0's:  0.2719409819384381
+For  0.4  * pi, ratio of 1's to 0's:  0.5501472639900791
+For  0.5  * pi, ratio of 1's to 0's:  1.0145044319097503
+For  0.6  * pi, ratio of 1's to 0's:  1.8843380444188058
+For  0.7  * pi, ratio of 1's to 0's:  3.8520135856380397
+For  0.8  * pi, ratio of 1's to 0's:  9.37344398340249
+For  0.9  * pi, ratio of 1's to 0's:  38.52569169960474
