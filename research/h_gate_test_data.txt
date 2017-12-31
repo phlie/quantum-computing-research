@@ -1,0 +1,5 @@
+Prints the number of 1's and 0's after putting one qubit through a
+H Gate (superposition) and then classically measuring the results
+Shots:  10000000    computer=ec2-instance
+1's:  4999195
+0's:  5000805
