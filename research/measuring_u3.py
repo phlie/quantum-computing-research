@@ -4,10 +4,9 @@ from qiskit import QuantumProgram, QISKitError
 import math
 # Number of qubits and classical registers
 num_qubits = 1
-shots = 10000                    # Number of times the program should run
+shots = 100000                    # Number of times the program should run
 backend = 'local_qasm_simulator'  # Whether to use the simulator or the real thing
 circuit_name = 'circuit'          # What you wish to call the circuit
-
 
 # This is where the quantum and classical registers are defined
 Q_SPECS = {
@@ -23,6 +22,8 @@ Q_SPECS = {
         }]}],
 }
 
+print("|Frac | mul | result")
+print("====================")
 for x in range(9):
     try:
         frac = 0.1 * float(1.0 + x)
@@ -49,7 +50,7 @@ for x in range(9):
         result = out.get_counts(circuit_name)
 
         # The results section where you print out the information of the experiment
-        print("For ", frac, " * pi, ratio of 1's to 0's: ", result['1'] / result['0'])
+        print("|", frac, "| *pi |", result['1'] / result['0'])
 
             # For general errors, research later
     except QISKitError as ex:
