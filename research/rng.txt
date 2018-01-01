@@ -8,3 +8,17 @@
 [93, 116]
 [92, 117]
 [96, 113]
+        
+# This experiment attempts to make a random number generator
+# It currently divides the 1's and 0's and then adds ten
+# Of their digits together
+
+shots= 10,000 loops=2000 Computer=ec2-instance
+[1026, 974]
+
+Shots: 10000 Loops: 1000 Computer= ec2-instance
+[116, 109, 90, 106, 99, 108, 82, 98, 107, 85]
+
+Shots: 10000 Loops: 10000
+[1255, 1021, 920, 1047, 957, 1036, 941, 993, 975, 855]
+
