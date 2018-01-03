@@ -3,6 +3,7 @@
 [152, 49, 99]
 [153, 51, 96]
 [149, 56, 95]
+
 # 200 runs with 2 digits at 1024 shots, adding up 10 digits and then dividing by modulus 2
 [86, 123]
 [93, 116]
@@ -22,3 +23,12 @@ Shots: 10000 Loops: 1000 Computer= ec2-instance
 Shots: 10000 Loops: 10000
 [1255, 1021, 920, 1047, 957, 1036, 941, 993, 975, 855]
 
+##===========Notes===========##
+I need to stop using anything that is a random number that is generated in Python
+
+Shots: 10000 Loops:100
+[53, 47]
+[46, 54]
+
+Shots: 10000 Loops:1000
+[510, 490]
