@@ -10,7 +10,7 @@ circuit_name = 'circuit'          # What you wish to call the circuit
 
 
 num_rand_digits = 2
-num_runs = 1000
+num_runs = 2000
 digit_array = [0]*num_rand_digits
 
 # This is where the quantum and classical registers are defined

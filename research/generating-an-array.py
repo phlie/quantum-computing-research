@@ -1,13 +1,13 @@
-# A template anyone can use for trying out different quantum circuits
+# Creates a byte from the superposition of a Qubit
 
 from qiskit import QuantumProgram, QISKitError, RegisterSizeError
 import math
 # Number of qubits and classical registers
-num_qubits = 2                   # Number of qubits and classical registers
+num_qubits = 1                   # Number of qubits and classical registers
 shots = 255                    # Number of times the program should run
 backend = 'local_qasm_simulator'  # Whether to use the simulator or the real thing
 circuit_name = 'circuit'          # What you wish to call the circuit
-loops = 1                         # The amount of times it loops over the whole program
+loops = 1
 
 # This is where the quantum and classical registers are defined
 Q_SPECS = {
@@ -35,7 +35,7 @@ try:
 
         # Circuit Design Goes here
         qc.h(q_r[0])
-        qc.h(q_r[1])
+
         # qc.cx(q_r[1], q_r[2])  # CNOT from 1 to 2
         # qc.x(q_r[1])
 
@@ -43,16 +43,15 @@ try:
         for qubit in range(num_qubits):
             qc.measure(q_r[qubit], c_r[qubit])
 
-        # Compiles and executes the code
-        out = qp.execute(circuit_name, backend=backend, shots=shots)
+            # Compiles and executes the code
+            out = qp.execute(circuit_name, backend=backend, shots=shots)
 
-        # Get the results of the circuit
-        result = out.get_counts(circuit_name)
+            # Get the results of the circuit
+            result = out.get_counts(circuit_name)
             
-        # The results section where you print out the information of the experiment
-        print(result)
-
-
+            # The results section where you print out the information of the experiment
+            # Prints a randomly created byte array
+            print(bin(result['1']))
 # For errors in the circuit
 except QISKitError as ex:
     print('There was an error in the circuit!. Error = {}'.format(ex))
