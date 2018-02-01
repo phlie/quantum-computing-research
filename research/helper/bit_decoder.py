@@ -7,10 +7,10 @@ import math                     # The math library is used for sin, and pi
 array_of_possibilities = []     # The array holds all the possible bit configurations 
 
 # Starts the generation of the bit array
-def init_generate_bits(num_of_qubits):
+def init_generate_bits(num_of_bits):
     global array_of_possibilities  # Makes sure to get the global
     array_of_possibilities = []    # Reset array
-    generate_bits('', num_of_qubits - 1)  # Qubits are counted from 1
+    generate_bits('', num_of_bits - 1)  # Qubits are counted from 1
     return array_of_possibilities         # Return
 
 # Generates the bit configurations using recur
@@ -28,7 +28,8 @@ def generate_bits(previous_bit_array, num_to_recur):
 # angle = abs(pi/2 - theta ) for between 0 and pi so if at pi it will equal pi/2 which is 
 
 # Generates the breaks in requried for that amount of bits and that amount of shots
-def generate_limits(num_of_limits, shots):
+def generate_limits(num_of_bits, shots):
+    num_of_limits = 2**num_of_bits
     limit_array = []            # Init 'limit_array'
     angle_increments = math.pi / num_of_limits  # Find the divisions
     starting_angle = angle_increments / 2       # Get the offset
@@ -41,6 +42,17 @@ def generate_limits(num_of_limits, shots):
 
     return limit_array          # Return the limits array
 
+def generate_lookup(num_of_bits):
+    lookup_dict = {}
+    bit_increment_array = init_generate_bits(num_of_bits)
+    # print("BIA: ", bit_increment_array)
+    angle_increments = math.pi / (2**num_of_bits)  # Find the divisions
+    for x in range(2**num_of_bits):
+        angle = round(angle_increments * x, 3)
+        lookup_dict[bit_increment_array[x]] = angle
+    return lookup_dict
+
+
 # less_than_array = [20, 225, 600, 1250, 1875, 2725, 3600, 4500, 5500, 6400, 7275, 8125, 8750, 9400, 9775, 9980]
                     # [24, 215, 590, 1134, 1828, 2643, 3548, 4509, 5490, 6451, 7356, 8171, 8865, 9409, 9784, 9975]
 
@@ -48,12 +60,15 @@ def generate_limits(num_of_limits, shots):
 def decoder(current_bit_result, shots, num_bits):
     bit_possible_array = init_generate_bits(num_bits)  # Call the generate all the possible configurations function
     output_bits = bit_possible_array[0]                # If no if below, use '0000' or '00' or whatever amount of '0's
-    less_than_array = generate_limits(num_bits**2, shots)  # Generate the limits given the num_bits and the shots
+    less_than_array = generate_limits(num_bits, shots)  # Generate the limits given the num_bits and the shots
     # print(less_than_array)
     length_lta = len(less_than_array)
     for x in range(length_lta):
         # print("X: ", x)
         if current_bit_result > less_than_array[x]:  # If the bits to test is greater than the break array
-            output_bits = bit_possible_tarray[x + 1]  # Save the output bits for later
+            output_bits = bit_possible_array[x + 1]  # Save the output bits for later
             # print("OB: ", output_bits);
     return output_bits          # Return the total bits
+
+# print(generate_lookup(4))
+# print(init_generate_bits(4))
