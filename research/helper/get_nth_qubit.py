@@ -1,8 +1,14 @@
 # Initialize the variables used in the loop
-bit_find_array = ''
+which_one_to_target = 0
 array_of_possibilities = []
-number_of_recurs = 3
-which_one_to_target = 3
+
+def init_bit_find(num_of_qubits, target):
+    global which_one_to_target
+    global array_of_possibilities
+    array_of_possibilities = []
+    which_one_to_target = target
+    recur_find('', num_of_qubits - 1)
+    return array_of_possibilities
 
 # Takes in the previous array and the number left in the recurences
 def recur_find(previous_bit_array, num_to_recur):
@@ -23,5 +29,3 @@ def recur_find(previous_bit_array, num_to_recur):
             else:
                 array_of_possibilities.append(previous_bit_array + x)  # Else call the final step and append
 
-recur_find('', number_of_recurs)
-print(array_of_possibilities)
