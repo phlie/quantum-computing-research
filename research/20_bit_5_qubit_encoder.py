@@ -10,7 +10,7 @@ from qiskit import QuantumProgram, QISKitError, RegisterSizeError
 import math                     # Used for PI
 from random import randint      # Imports the random integer function used to grab the bits
 import helper.get_nth_qubit as gnq  # The helper function used in the Quantum Decoding
-
+import helper.bit_decoder as bd
 # Number of qubits and classical registers
 num_qubits = 5                   # Number of qubits and classical registers
 # The total amount of superpositions. Is possible to change but the lower the value, the less accuracy
@@ -18,7 +18,7 @@ shots = 10000                    # Number of times the program should run
 backend = 'local_qasm_simulator'  # Whether to use the simulator or the real thing
 circuit_name = 'circuit'          # What you wish to call the circuit
 loops = 1                        # The amount of times it loops over the whole program
-
+num_bits_in_byte = 4
 # This is where the quantum and classical registers are defined
 Q_SPECS = {
     'circuits': [{
@@ -91,38 +91,7 @@ try:
             # This pat gets the correct output bits without knowing the input bits by using the difference
             # between the amount of 1's and 0's to statistically say what the ouput bits are
             # If the total 1's is less than 20 with 10,000 shots, output '0000'
-            if current_bit_result < 20 * shots / 10000 :
-                output_bits = "0000"  # Save the output bits for later
-            elif current_bit_result < 225 * shots / 10000:
-                output_bits = "0001"
-            elif current_bit_result < 600 * shots / 10000:
-                output_bits = "0010"
-            elif current_bit_result < 1250 * shots / 10000:
-                output_bits = "0011"
-            elif current_bit_result < 1875 * shots / 10000:
-                output_bits = "0100"
-            elif current_bit_result < 2725 * shots / 10000:
-                output_bits = "0101"
-            elif current_bit_result < 3600 * shots / 10000:
-                output_bits = "0110"
-            elif current_bit_result < 4500 * shots / 10000:
-                output_bits = "0111"
-            elif current_bit_result < 5500 * shots / 10000:
-                output_bits = "1000"
-            elif current_bit_result < 6400 * shots / 10000:
-                output_bits = "1001"
-            elif current_bit_result < 7275 * shots / 10000:
-                output_bits = "1010"
-            elif current_bit_result < 8125 * shots / 10000:
-                output_bits = "1011"
-            elif current_bit_result < 8750 * shots / 10000:
-                output_bits = "1100"
-            elif current_bit_result < 9400 * shots / 10000:
-                output_bits = "1101"
-            elif current_bit_result < 9775 * shots / 10000:
-                output_bits = "1110"
-            else:
-                output_bits = "1111"
+            output_bits = bd.decoder(current_bit_result, shots, num_bits_in_byte)
 
             print("Output Bits: ", output_bits)  # Prints the output bits for the current Q
             if bits[current_qubit] == output_bits:  # Checks to see which is true
