@@ -17,7 +17,7 @@ num_qubits = 5                   # Number of qubits and classical registers
 shots = 10000                    # Number of times the program should run
 backend = 'local_qasm_simulator'  # Whether to use the simulator or the real thing
 circuit_name = 'circuit'          # What you wish to call the circuit
-loops = 1                         # The amount of times it loops over the whole program
+loops = 1                        # The amount of times it loops over the whole program
 
 # This is where the quantum and classical registers are defined
 Q_SPECS = {
