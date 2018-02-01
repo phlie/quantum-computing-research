@@ -86,7 +86,6 @@ try:
                     bit_1_count += result[x + y + z + '1']
                     bit_2_count += result['1' + x + y + z]  # Passed through the H Gate
                     bit_3_count += result[x + '1' + y + z]
-
         bit_array = ''
 
         # Gets the decoder values
