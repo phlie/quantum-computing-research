@@ -1,7 +1,8 @@
-# This is a quantum program that encodes as many bits as it can on one Q into a byte
-# It uses a helper function to generate all the nessasary lookup tables and the
-# bit array with all possible combitations. It can be modified to store up to 8 bits
-# on one Q, to modify the program just change the top values
+# The Quantum microcontroller is composed of the two Q's which each carry 8 traditional bits,
+# which make up a byte that are used to do calculations such as add and subtract, along with
+# the instruction Q which tells the microcontroller what to do and is also 8 traditional bits
+# And the result Q along with 1 for storage, there will be no carry bits resulting
+# In a total of 5 Q's and then lots of Python code for the interface
 
 
 from qiskit import QuantumProgram, QISKitError, RegisterSizeError
@@ -11,17 +12,18 @@ import helper.get_nth_qubit as gnq  # The helper function used in the Quantum De
 import helper.bit_decoder as bd
 
 # Number of qubits and classical registers
-num_qubits = 1                   # Number of qubits and classical registers
+num_qubits = 2                   # Number of qubits and classical registers
+num_qc_qubits = 16               # The number of qubits in the actual quantum computer
 # The total amount of superpositions. Is possible to change but the lower the value, the less accuracy
-shots = 100000                    # Number of times the program should run
+shots = 1024                # Number of times the program should run
 circuit_name = 'circuit'          # What you wish to call the circuit
 loops = 1                        # The amount of times it loops over the whole program
-num_bits_in_byte = 8
-backend = 'local_qasm_simulator'  # Whether to use the simulator or the real thingn
+num_bits_in_byte = 4
+# backend = 'local_qasm_simulator'  # Whether to use the simulator or the real thingn
 
 # For running on the actual quantum computer
-# backend = 'ibmqx5'
-# import helper.Qconfig as Qconfig
+backend = 'ibmqx5'
+import helper.Qconfig as Qconfig
 
 # This is where the quantum and classical registers are defined
 Q_SPECS = {
@@ -58,7 +60,7 @@ try:
         qp = QuantumProgram(specs=Q_SPECS)
 
         # For running the code on IBM's Q
-        # qp.set_api(Qconfig.APItoken, Qconfig.config['url'])
+        qp.set_api(Qconfig.APItoken, Qconfig.config['url'])
 
         qc = qp.get_circuit(circuit_name)
 
@@ -93,11 +95,15 @@ try:
             # Use the helper function to get an array of possible arrangements of the classical registers
             possible_results = gnq.init_bit_find(num_qubits, current_qubit)
             # print("PR: ", possible_results)
+            prepend_result = ''
+            for o in range(num_qc_qubits - num_qubits):
+                prepend_result += '0'
+            print("PR: ", prepend_result)
 
             # For all the possible results, loop through and ...
             for r in range(len(possible_results)):
-                if possible_results[r] in result:  # If the current possible result is in results
-                    current_bit_result += result[possible_results[r]]  # Add to the total 1's for that Q
+                if prepend_result + possible_results[r] in result:  # If the current possible result is in results
+                    current_bit_result += result[prepend_result + possible_results[r]]  # Add to the total 1's for that Q
             # print("CBR: ", current_bit_result)
             # This pat gets the correct output bits without knowing the input bits by using the difference
             # between the amount of 1's and 0's to statistically say what the ouput bits are

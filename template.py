@@ -2,12 +2,18 @@
 
 from qiskit import QuantumProgram, QISKitError, RegisterSizeError
 import math
+import helper.get_nth_qubit as gnq  # The helper function used in the Quantum Decoding
+
 # Number of qubits and classical registers
-num_qubits = 2                   # Number of qubits and classical registers
+num_qubits = 5                   # Number of qubits and classical registers
 shots = 255                    # Number of times the program should run
 backend = 'local_qasm_simulator'  # Whether to use the simulator or the real thing
 circuit_name = 'circuit'          # What you wish to call the circuit
 loops = 1                         # The amount of times it loops over the whole program
+
+# For running on the actual quantum computer
+# backend = 'ibmqx5'
+# import helper.Qconfig as Qconfig
 
 # This is where the quantum and classical registers are defined
 Q_SPECS = {
@@ -29,6 +35,9 @@ try:
         qp = QuantumProgram(specs=Q_SPECS)
         qc = qp.get_circuit(circuit_name)
 
+        # For running the code on IBM's Q
+        # qp.set_api(Qconfig.APItoken, Qconfig.config['url'])
+
         # Get both registers
         q_r = qp.get_quantum_register('qr')
         c_r = qp.get_classical_register('cr')
@@ -36,6 +45,10 @@ try:
         # Circuit Design Goes here
         qc.h(q_r[0])
         qc.h(q_r[1])
+        qc.h(q_r[2])
+        qc.h(q_r[3])
+        qc.h(q_r[4])
+
         # qc.cx(q_r[1], q_r[2])  # CNOT from 1 to 2
         # qc.x(q_r[1])
 
@@ -48,9 +61,29 @@ try:
 
         # Get the results of the circuit
         result = out.get_counts(circuit_name)
-            
+
+        output = []        # Saves the output
+        # print("Result: ", result)  # Ouputs the total result array
+
+        # Loop through all the Qubits to get the total amount of 1's for each Qubit
+        for current_qubit in range(num_qubits):  # For each Q in the circuit, loop through
+            possible_results = []                # We want to initialize this to nil
+            current_bit_result = 0;              # Each itteration start fresh
+
+            # Use the helper function to get an array of possible arrangements of the classical registers
+            possible_results = gnq.init_bit_find(num_qubits, current_qubit)
+            # print("PR: ", possible_results)
+
+            # For all the possible results, loop through and ...
+            for r in range(len(possible_results)):
+                if possible_results[r] in result:  # If the current possible result is in results
+                    current_bit_result += result[possible_results[r]]  # Add to the total 1's for that Q
+
+            # Outputs the amount of 1's from MSB to LSB for each individual Qubit
+            output.insert(0, current_bit_result)
+
         # The results section where you print out the information of the experiment
-        print(result)
+        print("Output: ", output)
 
 
 # For errors in the circuit
