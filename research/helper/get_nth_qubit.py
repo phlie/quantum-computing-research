@@ -40,3 +40,5 @@ def recur_find(previous_bit_array, num_to_recur):
                 break
             else:
                 array_of_possibilities.append(previous_bit_array + x)  # Else call the final step and append
+
+

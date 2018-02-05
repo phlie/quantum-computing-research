@@ -11,12 +11,12 @@ import helper.get_nth_qubit as gnq  # The helper function used in the Quantum De
 import helper.bit_decoder as bd
 
 # Number of qubits and classical registers
-num_qubits = 1                   # Number of qubits and classical registers
+num_qubits = 3                   # Number of qubits and classical registers
 # The total amount of superpositions. Is possible to change but the lower the value, the less accuracy
-shots = 100000                    # Number of times the program should run
+shots = 10000                    # Number of times the program should run
 circuit_name = 'circuit'          # What you wish to call the circuit
 loops = 1                        # The amount of times it loops over the whole program
-num_bits_in_byte = 8
+num_bits_in_byte = 4
 backend = 'local_qasm_simulator'  # Whether to use the simulator or the real thingn
 
 # For running on the actual quantum computer

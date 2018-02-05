@@ -3,7 +3,8 @@
 
 from qiskit import QuantumProgram, QISKitError, RegisterSizeError
 import math
-import get_nth_qubit as gnq  # The helper function used in the Quantum Decoding
+import helper.get_nth_qubit as gnq  # The helper function used in the Quantum Decoding
+
 
 class SomeFramework:
     """A Quantum Computing Framework"""
@@ -85,7 +86,7 @@ class SomeFramework:
             # Outputs the amount of 1's from MSB to LSB for each individual Qubit
             output.insert(0, current_bit_result)
         self.total_amount_of_ones = output
-        print("Got the results: ", self.total_amount_of_ones)
+        print("Got the amount of 1s: ", self.total_amount_of_ones)
         return self.total_amount_of_ones
 
     def setup_and_run_complete_circuit(self):
@@ -108,13 +109,18 @@ class SomeFramework:
         """Makes an H-Gate where specified"""
         self.qc.h(self.qr[qubit_index])
 
-C = SomeFramework(3, "my_circuit")
+    def u3_gate(self, qubit_index=0, theta=0.0, phi=0.0, lam=0.0):
+        """Creates a U3 Rotation Gate"""
+        self.qc.u3(theta, phi, lam, self.qr[qubit_index])
 
-C.insert_h_gate(0)
-C.insert_h_gate(1)
-C.insert_h_gate(2)
 
-C.run_circuit()
+# CODE START
+# C = SomeFramework(1, "my_circuit", 10000)
+
+# C.u3_gate(0, 0.4*math.pi, 0, 0)
+
+# C.run_circuit()
+# CODE END
 
 # def add_gates_to_qubits(gate_to_add, initial_qubit, end_qubit=0):
 #     print("Gate: ", gate_to_add, " added to ", initial_qubit, " and ", end_qubit)
