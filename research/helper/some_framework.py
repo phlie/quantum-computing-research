@@ -4,7 +4,7 @@
 from qiskit import QuantumProgram, QISKitError, RegisterSizeError
 import math
 import helper.get_nth_qubit as gnq  # The helper function used in the Quantum Decoding
-
+import helper.bit_decoder as bd
 
 class SomeFramework:
     """A Quantum Computing Framework"""
@@ -17,6 +17,10 @@ class SomeFramework:
         self.circuit_name = circuit_name          # The circuit name
         self.generate_layout_of_circuit()
         self.setup_quantum_program()
+
+#=============================
+# QUANTUM CIRCUIT FUNCTIONS
+#=============================
 
     def generate_layout_of_circuit(self):
         """Creates the arrangement of the quantum circuit"""
@@ -101,12 +105,16 @@ class SomeFramework:
 
     def run_circuit(self):
         self.setup_results()
-        return self.get_results()
-
+        self.results = self.get_results()
+        return self.results
 
     def how_many_qubits(self):
         """Returns how many Qubits there are in the circuit"""
         return self.number_of_qubits
+
+#=============================
+# GATE FUNCTIONS
+#=============================
 
     def h_gate(self, qubit_index):
         """Makes an H-Gate where specified"""
@@ -126,13 +134,88 @@ class SomeFramework:
         """Setups a barrier gate"""
         self.qc.barrier()
 
+#=============================
+# OUTPUT FUNCTIONS
+#=============================
+
     def output_test(self, data_in, data_out):
+        """Compares the output results"""
         if data_in  == data_out:
             self.print_operation("Output Correct")
             print()
         else:
             self.print_error("Output Incorrect")
             print()
+
+    def create_lookup(self, num_bits):
+        """Creates a lookup table used for Qubit storage"""
+        self.bit_lookup = bd.generate_lookup(num_bits)
+        return self.bit_lookup
+
+    def decode_qubit(self, which_qubit, num_bits):
+        """Retrieves the bits that were stored"""
+        self.decoded_qubit = bd.decoder(self.results[which_qubit], self.shots, num_bits)
+        return self.decoded_qubit
+
+    def setup_in_classic_gate_mode(self, input_bits):
+        """Given an array contanining two bits each, sets it up in classical mode"""
+        if len(input_bits) > self.number_of_qubits:
+            print_error("Inputs excede number of qubits")
+            return
+        rl = self.create_lookup(2)
+        for x in range(len(input_bits)):
+            self.u3_gate(x, rl[input_bits[x]])
+
+#=============================
+# TRADITIONAL GATES
+#=============================
+
+    def and_gate(self, which_qubit_or_bits):
+        """Sets up an AND Gate either on a Qubit or with two input bits"""
+        if isinstance(which_qubit_or_bits, int):
+            input_to_gate_bits = self.decode_qubit(which_qubit_or_bits, 2)
+        elif isinstance(which_qubit_or_bits, str):
+            input_to_gate_bits = which_qubit_or_bits
+        else:
+            print_error("Input to XOR Gate type not recognized")
+        if input_to_gate_bits == "11":
+            out = "1"
+        else:
+            out = "0"
+        return out
+
+    def or_gate(self, which_qubit_or_bits):
+        """Sets up an OR Gate either on a Qubit or with two input bits"""
+        if isinstance(which_qubit_or_bits, int):
+            input_to_gate_bits = self.decode_qubit(which_qubit_or_bits, 2)
+        elif isinstance(which_qubit_or_bits, str):
+            input_to_gate_bits = which_qubit_or_bits
+        else:
+            print_error("Input to XOR Gate type not recognized")
+        if input_to_gate_bits == "00":
+            out = "0"
+        else:
+            out = "1"
+        return out
+
+    def xor_gate(self, which_qubit_or_bits):
+        """Sets up an XOR Gate either on a Qubit or with two input bits"""
+        if isinstance(which_qubit_or_bits, int):
+            input_to_gate_bits = self.decode_qubit(which_qubit_or_bits, 2)
+        elif isinstance(which_qubit_or_bits, str):
+            input_to_gate_bits = which_qubit_or_bits
+        else:
+            print_error("Input to XOR Gate type not recognized")
+        if input_to_gate_bits == "00" or input_to_gate_bits == "11":
+            out = "0"
+        else:
+            out = "1"
+        return out
+
+
+#=============================
+# PRINT FUNCTIONS
+#=============================
 
     def print_status(self, text):
         print('\x1b[1;34;40m', text, '\x1b[0m')
