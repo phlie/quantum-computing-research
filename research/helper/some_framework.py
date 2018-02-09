@@ -10,6 +10,10 @@ class SomeFramework:
     """A Quantum Computing Framework"""
     backend = 'local_qasm_simulator'
 
+#=============================
+# INIT FUNCTION
+#=============================
+
     def __init__(self, number_of_qubits=1, circuit_name='some_circuit', shots=1024):
         """The initial setup of the Quantum Program"""
         self.number_of_qubits = number_of_qubits  # Used to store the amount of Qubits in a circuit
@@ -17,6 +21,7 @@ class SomeFramework:
         self.circuit_name = circuit_name          # The circuit name
         self.generate_layout_of_circuit()
         self.setup_quantum_program()
+        self.number_of_bits = 2
 
 #=============================
 # QUANTUM CIRCUIT FUNCTIONS
@@ -45,7 +50,7 @@ class SomeFramework:
 
         self.qr = self.qp.get_quantum_register('qr')         # Gets the Qubit registers
         self.cr = self.qp.get_classical_register('cr')       # Gets the classical registers
-        self.print_operation("Quantum Circuit '" + self.circuit_name + "' compossed of " + str(self.number_of_qubits) + " Qubits and the same Classical Registers, setup!!!\n")
+        self.print_operation("Quantum Circuit '" + self.circuit_name + "' compossed of '" + str(self.number_of_qubits) + "' Qubits and the same Classical Registers, setup!!!\n")
 
     def quantum_gates(self):
         """Used to setup the quantum circuit's gates"""
@@ -92,8 +97,7 @@ class SomeFramework:
             # Outputs the amount of 1's from LSB to MSB for each individual Qubit
             output.append(current_bit_result)
         self.total_amount_of_ones = output
-        self.print_operation("Got the amount of 1s: ")
-        print(self.total_amount_of_ones, "\n")
+        self.print_operation("Got the amount of 1s: " + str(self.total_amount_of_ones) + "\n")
         return self.total_amount_of_ones
 
     def setup_and_run_complete_circuit(self):
@@ -104,6 +108,7 @@ class SomeFramework:
         return self.get_results()
 
     def run_circuit(self):
+        """Runs the circuit after it has been setup"""
         self.setup_results()
         self.results = self.get_results()
         return self.results
@@ -157,86 +162,100 @@ class SomeFramework:
         self.decoded_qubit = bd.decoder(self.results[which_qubit], self.shots, num_bits)
         return self.decoded_qubit
 
-    def setup_in_classic_gate_mode(self, input_bits):
+    def setup_in_classic_gate_mode(self, input_bits, number_of_bits=2):
         """Given an array contanining two bits each, sets it up in classical mode"""
+        self.print_status("Setting up the Qubits with '" + str(number_of_bits) + "' bits in Classic Gate Mode...")
+        self.number_of_bits = number_of_bits
         if len(input_bits) > self.number_of_qubits:
-            print_error("Inputs excede number of qubits")
+            self.print_error("Inputs excede number of qubits")
             return
-        rl = self.create_lookup(2)
+        rl = self.create_lookup(number_of_bits)
         for x in range(len(input_bits)):
+            if len(input_bits[x]) != self.number_of_bits:
+                self.print_error("The number of input bits in the setup in CGM does not match the number of bits expected")
+                return
             self.u3_gate(x, rl[input_bits[x]])
+        self.print_operation("Classic Gate Mode Qubits Setup!\n")
 
+
+    def decode_classic_gate_mode(self):
+        """Decodes all qubits and gives their output bits in an array"""
+        self.print_status("Decoding all Qubits in Classic Gate Mode...")
+        output_array = []
+        for num in range(self.number_of_qubits):
+            output_array.append(self.decode_qubit(num, self.number_of_bits))
+        self.print_operation("Qubits Decoded for Classic Gate Mode: " + str(output_array) + "\n")
+        return output_array
 #=============================
 # TRADITIONAL GATES
 #=============================
 
-    def and_gate(self, which_qubit_or_bits):
+    def and_gate(self, which_qubit_or_bits, number_of_bits=-1):
         """Sets up an AND Gate either on a Qubit or with two input bits"""
         if isinstance(which_qubit_or_bits, int):
-            input_to_gate_bits = self.decode_qubit(which_qubit_or_bits, 2)
+            if number_of_bits == -1:
+                number_of_bits = self.number_of_bits
+            input_to_gate_bits = self.decode_qubit(which_qubit_or_bits, number_of_bits)
         elif isinstance(which_qubit_or_bits, str):
             input_to_gate_bits = which_qubit_or_bits
         else:
-            print_error("Input to XOR Gate type not recognized")
-        if input_to_gate_bits == "11":
+            print_error("Input to AND Gate type not recognized")
+        if input_to_gate_bits == '1' * len(input_to_gate_bits):
             out = "1"
         else:
             out = "0"
         return out
 
-    def or_gate(self, which_qubit_or_bits):
+    def or_gate(self, which_qubit_or_bits, number_of_bits=-1):
         """Sets up an OR Gate either on a Qubit or with two input bits"""
         if isinstance(which_qubit_or_bits, int):
-            input_to_gate_bits = self.decode_qubit(which_qubit_or_bits, 2)
+            if number_of_bits == -1:
+                number_of_bits = self.number_of_bits
+            input_to_gate_bits = self.decode_qubit(which_qubit_or_bits, number_of_bits)
         elif isinstance(which_qubit_or_bits, str):
             input_to_gate_bits = which_qubit_or_bits
         else:
-            print_error("Input to XOR Gate type not recognized")
-        if input_to_gate_bits == "00":
+            print_error("Input to OR Gate type not recognized")
+        if input_to_gate_bits == '0'*len(input_to_gate_bits):
             out = "0"
         else:
             out = "1"
         return out
 
-    def xor_gate(self, which_qubit_or_bits):
+    def xor_gate(self, which_qubit_or_bits, number_of_bits=-1):
         """Sets up an XOR Gate either on a Qubit or with two input bits"""
         if isinstance(which_qubit_or_bits, int):
-            input_to_gate_bits = self.decode_qubit(which_qubit_or_bits, 2)
+            if number_of_bits == -1:
+                number_of_bits = self.number_of_bits
+            input_to_gate_bits = self.decode_qubit(which_qubit_or_bits, number_of_bits)
         elif isinstance(which_qubit_or_bits, str):
             input_to_gate_bits = which_qubit_or_bits
         else:
             print_error("Input to XOR Gate type not recognized")
-        if input_to_gate_bits == "00" or input_to_gate_bits == "11":
+        if input_to_gate_bits == '0' * len(input_to_gate_bits) or input_to_gate_bits == '1' * len(input_to_gate_bits):
             out = "0"
         else:
             out = "1"
         return out
 
+    def combine_bits(self, array_of_bits):
+        total_output = ""
+        for bit in array_of_bits:
+            total_output += bit
+        return total_output
 
 #=============================
 # PRINT FUNCTIONS
 #=============================
 
     def print_status(self, text):
+        """Prints the status in blue"""
         print('\x1b[1;34;40m', text, '\x1b[0m')
 
     def print_error(self, text):
+        """Prints an error in red"""
         print('\x1b[1;31;40m', text, '\x1b[0m')
 
     def print_operation(self, text):
+        """Prints an op in green"""
         print('\x1b[1;32;40m', text, '\x1b[0m')
-            # CODE START
-# C = SomeFramework(1, "my_circuit", 10000)
-
-# C.u3_gate(0, 0.4*math.pi, 0, 0)
-
-# C.run_circuit()
-# CODE END
-
-# def add_gates_to_qubits(gate_to_add, initial_qubit, end_qubit=0):
-#     print("Gate: ", gate_to_add, " added to ", initial_qubit, " and ", end_qubit)
-
-
-# add_gates_to_qubits('X', 1)p
-# add_gates_to_qubits('X', 2, 3)
-
