@@ -199,7 +199,7 @@ class SomeFramework:
         elif isinstance(which_qubit_or_bits, str):
             input_to_gate_bits = which_qubit_or_bits
         else:
-            print_error("Input to AND Gate type not recognized")
+            self.print_error("Input to AND Gate type not recognized")
         if input_to_gate_bits == '1' * len(input_to_gate_bits):
             out = "1"
         else:
@@ -215,7 +215,7 @@ class SomeFramework:
         elif isinstance(which_qubit_or_bits, str):
             input_to_gate_bits = which_qubit_or_bits
         else:
-            print_error("Input to OR Gate type not recognized")
+            self.print_error("Input to OR Gate type not recognized")
         if input_to_gate_bits == '0'*len(input_to_gate_bits):
             out = "0"
         else:
@@ -231,12 +231,32 @@ class SomeFramework:
         elif isinstance(which_qubit_or_bits, str):
             input_to_gate_bits = which_qubit_or_bits
         else:
-            print_error("Input to XOR Gate type not recognized")
+            self.print_error("Input to XOR Gate type not recognized")
         if input_to_gate_bits == '0' * len(input_to_gate_bits) or input_to_gate_bits == '1' * len(input_to_gate_bits):
             out = "0"
         else:
             out = "1"
         return out
+
+    def not_gate(self, which_qubit_or_bits, number_of_bits=-1):
+        if isinstance(which_qubit_or_bits, int):
+            if number_of_bits == -1:
+                number_of_bits = self.number_of_bits
+            input_to_gate_bits = self.decode_qubit(which_qubit_or_bits, number_of_bits)
+        elif isinstance(which_qubit_or_bits, str):
+            input_to_gate_bits = which_qubit_or_bits
+        else:
+            self.print_error("Input to NOT Gate type not recognized")
+
+        output_bits = ""
+        for bit in input_to_gate_bits:
+            if bit == '1':
+                output_bits += '0'
+            elif bit == '0':
+                output_bits += '1'
+            else:
+                self.print_error("Error, neither a '1' or a '0' in the input bits")
+        return output_bits
 
     def combine_bits(self, array_of_bits):
         total_output = ""
