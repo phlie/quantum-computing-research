@@ -71,6 +71,7 @@ class SomeFramework:
         self.result = self.out.get_counts(self.circuit_name)
         if self.result != False:
             self.print_operation("Got the results!!!\n")
+            self.print_operation(self.result)
         else:
             self.print_error("Error getting the results\n")
         return self.result
@@ -131,6 +132,19 @@ class SomeFramework:
         else:
             self.print_error("Error creating H-Gate, neither a list or number as input")
 
+    def x_gate(self, qubit_index):
+        self.qc.x(self.qr[qubit_index])
+
+    def y_gate(self, qubit_index):
+        self.qc.y(self.qr[qubit_index])
+
+    def z_gate(self, qubit_index):
+        self.qc.z(self.qr[qubit_index])
+
+    def s_gate(self, qubit_index):
+        self.qc.s(self.qr[qubit_index])
+
+
     def u3_gate(self, qubit_index=0, theta=0.0, phi=0.0, lam=0.0):
         """Creates a U3 Rotation Gate"""
         self.qc.u3(theta, phi, lam, self.qr[qubit_index])
@@ -139,6 +153,8 @@ class SomeFramework:
         """Setups a barrier gate"""
         self.qc.barrier()
 
+    def cx_gate(self, control_qubit, target_qubit):
+        self.qc.cx(self.qr[control_qubit], self.qr[target_qubit])
 #=============================
 # OUTPUT FUNCTIONS
 #=============================
