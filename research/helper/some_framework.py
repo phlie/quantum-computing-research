@@ -14,14 +14,14 @@ class SomeFramework:
 # INIT FUNCTION
 #=============================
 
-    def __init__(self, number_of_qubits=1, circuit_name='some_circuit', shots=1024):
+    def __init__(self, number_of_qubits=1, circuit_name='some_circuit', shots=1024, number_of_bits=2):
         """The initial setup of the Quantum Program"""
         self.number_of_qubits = number_of_qubits  # Used to store the amount of Qubits in a circuit
         self.shots = shots                        # The amount of possibilities of 1's and 0's
         self.circuit_name = circuit_name          # The circuit name
         self.generate_layout_of_circuit()
         self.setup_quantum_program()
-        self.number_of_bits = 2
+        self.number_of_bits = number_of_bits
 
 #=============================
 # QUANTUM CIRCUIT FUNCTIONS
@@ -155,6 +155,10 @@ class SomeFramework:
 
     def cx_gate(self, control_qubit, target_qubit):
         self.qc.cx(self.qr[control_qubit], self.qr[target_qubit])
+
+    def ccx_gate(self, input_bit_1, input_bit_0, target_qubit):
+        self.qc.ccx(self.qr[input_bit_1], self.qr[input_bit_0], self.qr[target_qubit])
+
 #=============================
 # OUTPUT FUNCTIONS
 #=============================

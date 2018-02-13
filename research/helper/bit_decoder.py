@@ -28,7 +28,7 @@ def generate_bits(previous_bit_array, num_to_recur):
 
 # Generates the breaks in requried for that amount of bits and that amount of shots
 def generate_limits(num_of_bits, shots):
-    num_of_limits = 2**num_of_bits
+    num_of_limits = 2**num_of_bits - 1
     limit_array = []            # Init 'limit_array'
     angle_increments = math.pi / num_of_limits  # Find the divisions
     starting_angle = angle_increments / 2       # Get the offset
@@ -45,7 +45,10 @@ def generate_lookup(num_of_bits):
     lookup_dict = {}
     bit_increment_array = init_generate_bits(num_of_bits)
     # print("BIA: ", bit_increment_array)
-    angle_increments = math.pi / (2**num_of_bits)  # Find the divisions
+    number_of_loops = 2 ** num_of_bits
+    # angle_increments = math.pi / (2**num_of_bits)  # Find the divisions;
+    angle_increments = math.pi / (number_of_loops - 1)
+    # print("Max Angle: ", angle_increments * (number_of_loops - 1))
     for x in range(2**num_of_bits):
         angle = round(angle_increments * x, 3)
         lookup_dict[bit_increment_array[x]] = angle
@@ -66,7 +69,7 @@ def hex_generate_lookup():
 def hex_generate_limits(shots):
     num_of_limits = 16
     limit_array = []            # Init 'limit_array'
-    angle_increments = math.pi / num_of_limits  # Find the divisions
+    # angle_increments = math.pi / num_of_limits  # Find the divisions
     starting_angle = angle_increments / 2       # Get the offset
     # print(angle_increments)
     # Loop through the num_of_limits
@@ -100,7 +103,11 @@ def decoder(current_bit_result, shots, num_bits):
     length_lta = len(less_than_array)
     for x in range(length_lta):
         # print("X: ", x)
+        if current_bit_result > less_than_array[length_lta - 1]:
+            output_bits = bit_possible_array[length_lta]
+            break
         if current_bit_result > less_than_array[x]:  # If the bits to test is greater than the break array
+            # print(x, current_bit_result, less_than_array[x])
             output_bits = bit_possible_array[x + 1]  # Save the output bits for later
             # print("OB: ", output_bits);
     return output_bits          # Return the total bits
@@ -108,3 +115,6 @@ def decoder(current_bit_result, shots, num_bits):
 
 # print(generate_lookup(4))
 # print(init_generate_bits(4))
+# print(generate_lookup(2))
+# print(decoder(500, 1000, 2))
+# print(generate_limits(2, 1000))
