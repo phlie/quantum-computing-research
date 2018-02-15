@@ -1,4 +1,8 @@
-Pre:, Act: 
+!! Random Numbers that are used for u3
+!! Theta Gate rotation, then a Troffoli Gate
+!! Across the two input Qubits
+
+Pre:, Act:
  946,  949
  507,  509
   54,   47
