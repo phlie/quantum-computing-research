@@ -117,4 +117,4 @@ def decoder(current_bit_result, shots, num_bits):
 # print(init_generate_bits(4))
 # print(generate_lookup(2))
 # print(decoder(500, 1000, 2))
-# print(generate_limits(2, 1000))
+
