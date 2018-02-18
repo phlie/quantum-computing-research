@@ -1,7 +1,10 @@
 import helper.some_framework as sf
 
-C = sf.SomeFramework(5, shots=10000, number_of_bits=4)
-rl = C.create_lookup(4)
+num_bits = 4
+
+C = sf.SomeFramework(5, shots=10000, number_of_bits=num_bits)
+rl = C.create_lookup(num_bits)
+C.print_error(rl)
 C.u3_gate(0, rl["1111"])
 C.u3_gate(1, rl["1010"])
 C.u3_gate(2, rl["1100"])
