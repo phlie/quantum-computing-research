@@ -1,6 +1,9 @@
 import helper.some_framework as sf
+import math
 
-C = sf.SomeFramework(5, shots=1000)
-C.h_gate([0, 2, 4])
-C.run_circuit()
+num_loops = 5
 
+for x in range(num_loops):
+    C = sf.SomeFramework(1, shots=1000)
+    C.u3_gate(0, math.pi / 2)
+    C.run_circuit()

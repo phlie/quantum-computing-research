@@ -3,7 +3,7 @@ import helper.some_framework as sf
 
 in_bits = ["11", "11", "11", "01", "00", "10"]
 
-C = sf.SomeFramework(6)
+C = sf.SomeFramework(6, shots=1000)
 C.setup_in_classic_gate_mode(in_bits)
 C.run_circuit()
 C.decode_classic_gate_mode()

@@ -1,7 +1,6 @@
-# This helper function decodes a 4 bits stored into a single Q.
+# This helper function decodes bits stored into a single Q.
 # The decoder is manually inputed to guess what range the values
 # Of a certain input will take
-# Takes in the previous array and the number left in the recurences
 import math                     # The math library is used for sin, and pi
 
 array_of_possibilities = []     # The array holds all the possible bit configurations 
