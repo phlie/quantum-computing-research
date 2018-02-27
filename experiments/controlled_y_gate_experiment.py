@@ -1,16 +1,16 @@
-# In this experiment we are testing the mathematical prediction
-# of the Controlled X-Gate as derived previously for the Controlled
-# Qubit
+# Testing the mathematical derivitation of the Y-Gate in
+# an experiment on the Y-Gate. The problem is I don't know
+# How to use the imaginary number in it
 
 import helper.some_framework as sf
 import math
 import random as r
 shots = 1000
-num_loops = 1000
+num_loops = 10
 
-my_file = open("data/controlled_x_gate_experiment.txt", "w")
+my_file = open("data/controlled_y_gate_experiment.txt", "w")
 
-my_file.write("This is a %s shot experiment on the Controlled X-Gate with %s loops\n" % (shots, num_loops))
+my_file.write("This is a %s shot experiment on the Controlled Y-Gate with %s loops\n" % (shots, num_loops))
 my_file.write("Pre:, Act: \n")
 for x in range(num_loops):
     print("Current loop: ", x)
@@ -28,7 +28,7 @@ for x in range(num_loops):
     C.u3_gate(0, rotation_0)
     C.u3_gate(1, rotation_1)
 
-    C.cx_gate(0, 1)             # If the controlled gate is the MSB, then the math holds true
+    C.cy_gate(0, 1)             # If the controlled gate is the MSB, then the math holds true
 
     output = C.run_circuit()
 

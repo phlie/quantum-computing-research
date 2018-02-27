@@ -156,6 +156,9 @@ class SomeFramework:
     def cx_gate(self, control_qubit, target_qubit):
         self.qc.cx(self.qr[control_qubit], self.qr[target_qubit])
 
+    def cy_gate(self, control_qubit, target_qubit):
+        self.qc.cy(self.qr[control_qubit], self.qr[target_qubit])
+
     def ccx_gate(self, input_bit_1, input_bit_0, target_qubit):
         self.qc.ccx(self.qr[input_bit_1], self.qr[input_bit_0], self.qr[target_qubit])
 
